@@ -29,7 +29,7 @@ type FuseOptions = {
 
 export const Hello: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [results, setResults] = useState<string[]>([]);
+  const [results, setResults] = useState<string[]>(sampleFiles);
   const [options, setOptions] = useState<FuseOptions>({
     isCaseSensitive: false,
     includeScore: true,
@@ -38,6 +38,11 @@ export const Hello: FC = () => {
   });
 
   useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setResults(sampleFiles);
+      return;
+    }
+    
     const fuse = new Fuse(sampleFiles, options);
     const searchResults = fuse.search(searchTerm);
     setResults(searchResults.map(result => result.item));
