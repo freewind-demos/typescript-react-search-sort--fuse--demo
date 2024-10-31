@@ -31,7 +31,9 @@ type FuseOptions = {
 
 export const Hello: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [results, setResults] = useState<string[]>(sampleFiles);
+  const [results, setResults] = useState<Array<{ item: string; score?: number }>>(
+    sampleFiles.map(file => ({ item: file }))
+  );
   const [options, setOptions] = useState<FuseOptions>({
     isCaseSensitive: false,
     includeScore: true,
@@ -43,13 +45,13 @@ export const Hello: FC = () => {
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
-      setResults(sampleFiles);
+      setResults(sampleFiles.map(file => ({ item: file })));
       return;
     }
     
     const fuse = new Fuse(sampleFiles, options);
     const searchResults = fuse.search(searchTerm);
-    setResults(searchResults.map(result => result.item));
+    setResults(searchResults);
   }, [searchTerm, options]);
 
   return (
@@ -104,8 +106,13 @@ export const Hello: FC = () => {
         <h3>搜索结果：</h3>
         {results.length > 0 ? (
           <ul>
-            {results.map((file, index) => (
-              <li key={index}>{file}</li>
+            {results.map((result, index) => (
+              <li key={index}>
+                {result.item}
+                {result.score !== undefined && (
+                  <span className="score">（匹配度：{(1 - result.score).toFixed(2)}）</span>
+                )}
+              </li>
             ))}
           </ul>
         ) : (
