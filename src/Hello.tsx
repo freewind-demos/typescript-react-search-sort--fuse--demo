@@ -2,7 +2,6 @@ import React, { FC, useState, useEffect } from 'react';
 import Fuse, { FuseResult } from 'fuse.js';
 import { Input, Checkbox, Slider, Button, Card, List, Typography, Space, Divider, Tooltip } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { css } from '@emotion/css';
 
 // 示例文件名数据集
 const sampleFiles = [
@@ -36,38 +35,6 @@ type FuseOptions = {
   ignoreLocation: boolean;
   keys: string[];
   includeMatches: boolean;
-};
-
-const styles = {
-  container: css`
-    padding: 24px;
-  `,
-  mainContainer: css`
-    display: flex;
-    gap: 24px;
-  `,
-  paramsPanel: css`
-    width: 300px;
-  `,
-  contentPanel: css`
-    flex: 1;
-  `,
-  highlight: css`
-    background-color: #ffd591;
-    padding: 0 2px;
-    border-radius: 2px;
-  `,
-  searchResults: css`
-    margin-top: 16px;
-  `,
-  keywordButtons: css`
-    margin: 16px 0;
-  `,
-  score: css`
-    color: #8c8c8c;
-    font-size: 12px;
-    margin-left: 8px;
-  `
 };
 
 // 添加 Fuse.js 的类型定义
@@ -117,7 +84,11 @@ const HighlightText: FC<{ text: string; matches: FuseResult<string>['matches'] }
       {segments.map((segment, index) => (
         <span
           key={index}
-          className={segment.isMatch ? styles.highlight : undefined}
+          style={segment.isMatch ? {
+            backgroundColor: '#ffd591',
+            padding: '0 2px',
+            borderRadius: '2px'
+          } : undefined}
         >
           {segment.text}
         </span>
@@ -226,11 +197,14 @@ export const Hello: FC = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div style={{ padding: 24 }}>
       <Typography.Title level={2}>Fuse.js 文件搜索示例</Typography.Title>
 
-      <div className={styles.mainContainer}>
-        <Card title="搜索参数设置" className={styles.paramsPanel}>
+      <div style={{ display: 'flex', gap: 24 }}>
+        <Card 
+          title="搜索参数设置" 
+          style={{ width: 300 }}
+        >
           <Space direction="vertical" style={{ width: '100%' }}>
             <Tooltip 
               title={
@@ -488,7 +462,7 @@ export const Hello: FC = () => {
           </Space>
         </Card>
 
-        <div className={styles.contentPanel}>
+        <div style={{ flex: 1 }}>
           <Input
             size="large"
             value={searchTerm}
@@ -497,22 +471,20 @@ export const Hello: FC = () => {
             prefix={<SearchOutlined />}
           />
 
-          <div className={styles.keywordButtons}>
-            <Space wrap>
-              {sampleKeywords.map((keyword, index) => (
-                <Button
-                  key={index}
-                  onClick={() => setSearchTerm(keyword.text)}
-                  title={keyword.desc}
-                >
-                  {keyword.text}
-                </Button>
-              ))}
-            </Space>
-          </div>
+          <Space wrap style={{ margin: '16px 0' }}>
+            {sampleKeywords.map((keyword, index) => (
+              <Button
+                key={index}
+                onClick={() => setSearchTerm(keyword.text)}
+                title={keyword.desc}
+              >
+                {keyword.text}
+              </Button>
+            ))}
+          </Space>
 
           <List
-            className={styles.searchResults}
+            style={{ marginTop: 16 }}
             dataSource={results}
             renderItem={(result, index) => (
               <List.Item>
@@ -520,7 +492,11 @@ export const Hello: FC = () => {
                   text={result.item}
                   matches={result.matches}
                 />
-                <span className={styles.score}>
+                <span style={{
+                  color: '#8c8c8c',
+                  fontSize: '12px',
+                  marginLeft: '8px'
+                }}>
                   Score: {result.score?.toFixed(3)}
                 </span>
               </List.Item>
