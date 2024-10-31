@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import Fuse, { FuseResult } from 'fuse.js';
-import { Input, Checkbox, Slider, Button, Card, List, Typography, Space, Divider } from 'antd';
+import { Input, Checkbox, Slider, Button, Card, List, Typography, Space, Divider, Tooltip } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { css } from '@emotion/css';
 
@@ -178,6 +178,53 @@ export const Hello: FC = () => {
     setResults(searchResults);
   }, [searchTerm, options]);
 
+  const optionDescriptions = {
+    isCaseSensitive: {
+      title: '区分大小写',
+      description: '启用后，搜索将严格区分大小写。例如，"File" 和 "file" 将被视为不同的词。'
+    },
+    includeScore: {
+      title: '包含匹配分数',
+      description: '显示每个结果的匹配程度分数。分数越接近0表示匹配度越高。'
+    },
+    shouldSort: {
+      title: '结果排序',
+      description: '根据匹配分数对结果进行排序，匹配度最高的排在最前面。'
+    },
+    tokenize: {
+      title: '分词匹配',
+      description: '将搜索词和目标文本分解成单词进行匹配。例如"test helper"会被分解为"test"和"helper"分别匹配。'
+    },
+    findAllMatches: {
+      title: '查找所有匹配',
+      description: '在单个字符串中查找所有匹配项，而不是找到第一个匹配后就停止。这对于高亮显示所有匹配项很有用。'
+    },
+    useExtendedSearch: {
+      title: '使用扩展搜索',
+      description: '启用高级搜索语法，支持 AND、OR、NOT 等逻辑操作符。例如：^file 表示以file开头，!file 表示不包含file。'
+    },
+    ignoreLocation: {
+      title: '忽略位置',
+      description: '忽略文本中的匹配位置，只关注是否匹配。启用后，位置和距离参数将失效。'
+    },
+    threshold: {
+      title: '模糊匹配阈值',
+      description: '决定匹配的模糊程度。0.0表示完全匹配，1.0表示完全模糊。值越大，匹配越宽松。例如，0.6时"file"可能匹配到"filed"。'
+    },
+    minMatchCharLength: {
+      title: '最小匹配长度',
+      description: '匹配项的最小字符长度。较大的值可以避免过短的无意义匹配。'
+    },
+    location: {
+      title: '位置',
+      description: '期望找到匹配的位置。0表示从开头开始。此值影响距离计算，通常用于优先匹配特定位置的结果。'
+    },
+    distance: {
+      title: '距离',
+      description: '允许匹配的最大距离。较大的值允许单词间有更多的字符差异。例如，距离为100时，"test helper"可以匹配到"test_helper"。'
+    }
+  };
+
   return (
     <div className={styles.container}>
       <Typography.Title level={2}>Fuse.js 文件搜索示例</Typography.Title>
@@ -185,88 +232,195 @@ export const Hello: FC = () => {
       <div className={styles.mainContainer}>
         <Card title="搜索参数设置" className={styles.paramsPanel}>
           <Space direction="vertical" style={{ width: '100%' }}>
-            <Checkbox
-              checked={options.isCaseSensitive}
-              onChange={(e) => setOptions({ ...options, isCaseSensitive: e.target.checked })}
+            <Tooltip 
+              title={
+                <div>
+                  <div><strong>{optionDescriptions.isCaseSensitive.title}</strong></div>
+                  <div>{optionDescriptions.isCaseSensitive.description}</div>
+                </div>
+              }
             >
-              区分大小写
-            </Checkbox>
+              <Checkbox
+                checked={options.isCaseSensitive}
+                onChange={(e) => setOptions({ ...options, isCaseSensitive: e.target.checked })}
+              >
+                区分大小写
+              </Checkbox>
+            </Tooltip>
             
-            <Checkbox
-              checked={options.includeScore}
-              onChange={(e) => setOptions({ ...options, includeScore: e.target.checked })}
+            <Tooltip 
+              title={
+                <div>
+                  <div><strong>{optionDescriptions.includeScore.title}</strong></div>
+                  <div>{optionDescriptions.includeScore.description}</div>
+                </div>
+              }
             >
-              包含匹配分数
-            </Checkbox>
+              <Checkbox
+                checked={options.includeScore}
+                onChange={(e) => setOptions({ ...options, includeScore: e.target.checked })}
+              >
+                包含匹配分数
+              </Checkbox>
+            </Tooltip>
             
-            <Checkbox
-              checked={options.shouldSort}
-              onChange={(e) => setOptions({ ...options, shouldSort: e.target.checked })}
+            <Tooltip 
+              title={
+                <div>
+                  <div><strong>{optionDescriptions.shouldSort.title}</strong></div>
+                  <div>{optionDescriptions.shouldSort.description}</div>
+                </div>
+              }
             >
-              结果排序
-            </Checkbox>
+              <Checkbox
+                checked={options.shouldSort}
+                onChange={(e) => setOptions({ ...options, shouldSort: e.target.checked })}
+              >
+                结果排序
+              </Checkbox>
+            </Tooltip>
             
-            <Checkbox
-              checked={options.tokenize}
-              onChange={(e) => setOptions({ ...options, tokenize: e.target.checked })}
+            <Tooltip 
+              title={
+                <div>
+                  <div><strong>{optionDescriptions.tokenize.title}</strong></div>
+                  <div>{optionDescriptions.tokenize.description}</div>
+                </div>
+              }
             >
-              分词匹配
-            </Checkbox>
+              <Checkbox
+                checked={options.tokenize}
+                onChange={(e) => setOptions({ ...options, tokenize: e.target.checked })}
+              >
+                分词匹配
+              </Checkbox>
+            </Tooltip>
             
-            <Checkbox
-              checked={options.findAllMatches}
-              onChange={(e) => setOptions({ ...options, findAllMatches: e.target.checked })}
+            <Tooltip 
+              title={
+                <div>
+                  <div><strong>{optionDescriptions.findAllMatches.title}</strong></div>
+                  <div>{optionDescriptions.findAllMatches.description}</div>
+                </div>
+              }
             >
-              查找所有匹配
-            </Checkbox>
+              <Checkbox
+                checked={options.findAllMatches}
+                onChange={(e) => setOptions({ ...options, findAllMatches: e.target.checked })}
+              >
+                查找所有匹配
+              </Checkbox>
+            </Tooltip>
             
-            <Checkbox
-              checked={options.useExtendedSearch}
-              onChange={(e) => setOptions({ ...options, useExtendedSearch: e.target.checked })}
+            <Tooltip 
+              title={
+                <div>
+                  <div><strong>{optionDescriptions.useExtendedSearch.title}</strong></div>
+                  <div>{optionDescriptions.useExtendedSearch.description}</div>
+                </div>
+              }
             >
-              使用扩展搜索
-            </Checkbox>
+              <Checkbox
+                checked={options.useExtendedSearch}
+                onChange={(e) => setOptions({ ...options, useExtendedSearch: e.target.checked })}
+              >
+                使用扩展搜索
+              </Checkbox>
+            </Tooltip>
             
-            <Checkbox
-              checked={options.ignoreLocation}
-              onChange={(e) => setOptions({ ...options, ignoreLocation: e.target.checked })}
+            <Tooltip 
+              title={
+                <div>
+                  <div><strong>{optionDescriptions.ignoreLocation.title}</strong></div>
+                  <div>{optionDescriptions.ignoreLocation.description}</div>
+                </div>
+              }
             >
-              忽略位置
-            </Checkbox>
+              <Checkbox
+                checked={options.ignoreLocation}
+                onChange={(e) => setOptions({ ...options, ignoreLocation: e.target.checked })}
+              >
+                忽略位置
+              </Checkbox>
+            </Tooltip>
 
-            <Typography.Text>模糊匹配阈值</Typography.Text>
-            <Slider
-              min={0}
-              max={1}
-              step={0.1}
-              value={options.threshold}
-              onChange={(value) => setOptions({ ...options, threshold: value })}
-            />
+            <Tooltip 
+              title={
+                <div>
+                  <div><strong>{optionDescriptions.threshold.title}</strong></div>
+                  <div>{optionDescriptions.threshold.description}</div>
+                </div>
+              }
+            >
+              <div>
+                <Typography.Text>模糊匹配阈值</Typography.Text>
+                <Slider
+                  min={0}
+                  max={1}
+                  step={0.1}
+                  value={options.threshold}
+                  onChange={(value) => setOptions({ ...options, threshold: value })}
+                />
+              </div>
+            </Tooltip>
 
-            <Typography.Text>最小匹配长度</Typography.Text>
-            <Slider
-              min={1}
-              max={10}
-              value={options.minMatchCharLength}
-              onChange={(value) => setOptions({ ...options, minMatchCharLength: value })}
-            />
+            <Tooltip 
+              title={
+                <div>
+                  <div><strong>{optionDescriptions.minMatchCharLength.title}</strong></div>
+                  <div>{optionDescriptions.minMatchCharLength.description}</div>
+                </div>
+              }
+            >
+              <div>
+                <Typography.Text>最小匹配长度</Typography.Text>
+                <Slider
+                  min={1}
+                  max={10}
+                  value={options.minMatchCharLength}
+                  onChange={(value) => setOptions({ ...options, minMatchCharLength: value })}
+                />
+              </div>
+            </Tooltip>
 
-            <Typography.Text>位置</Typography.Text>
-            <Slider
-              min={0}
-              max={100}
-              value={options.location}
-              onChange={(value) => setOptions({ ...options, location: value })}
-            />
+            <Tooltip 
+              title={
+                <div>
+                  <div><strong>{optionDescriptions.location.title}</strong></div>
+                  <div>{optionDescriptions.location.description}</div>
+                </div>
+              }
+            >
+              <div>
+                <Typography.Text>位置</Typography.Text>
+                <Slider
+                  min={0}
+                  max={100}
+                  value={options.location}
+                  onChange={(value) => setOptions({ ...options, location: value })}
+                />
+              </div>
+            </Tooltip>
 
-            <Typography.Text>距离</Typography.Text>
-            <Slider
-              min={0}
-              max={1000}
-              step={10}
-              value={options.distance}
-              onChange={(value) => setOptions({ ...options, distance: value })}
-            />
+            <Tooltip 
+              title={
+                <div>
+                  <div><strong>{optionDescriptions.distance.title}</strong></div>
+                  <div>{optionDescriptions.distance.description}</div>
+                </div>
+              }
+            >
+              <div>
+                <Typography.Text>距离</Typography.Text>
+                <Slider
+                  min={0}
+                  max={1000}
+                  step={10}
+                  value={options.distance}
+                  onChange={(value) => setOptions({ ...options, distance: value })}
+                />
+              </div>
+            </Tooltip>
           </Space>
         </Card>
 
