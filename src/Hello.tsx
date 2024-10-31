@@ -465,19 +465,20 @@ export const Hello: FC = () => {
                 <Slider
                   style={{ flex: 1, minWidth: 0 }}
                   min={0}
-                  max={1000}
-                  step={10}
+                  max={100}
+                  step={1}
                   value={options.distance}
+                  marks={{ 0: '0', 100: '100' }}
                   onChange={(value) => setOptions({ ...options, distance: value })}
                 />
                 <Input
                   type="number"
-                  step={10}
+                  step={1}
                   style={{ width: 60 }}
                   value={options.distance}
                   onChange={(e) => {
                     const value = parseInt(e.target.value);
-                    if (!isNaN(value) && value >= 0 && value <= 1000) {
+                    if (!isNaN(value) && value >= 0 && value <= 100) {
                       setOptions({ ...options, distance: value });
                     }
                   }}
