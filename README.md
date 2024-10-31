@@ -1,11 +1,11 @@
-TypeScript React Hello World Demo
+TypeScript React Fuse.js Demo
 =================================
 
-一个最简单的Typescript + react项目，使用了webpack
+使用Fuse.js来过滤文本并高亮
 
 ```
 npm install
-npm run demo
+npm start
 ```
 
 It will open page on browser automatically.
