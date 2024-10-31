@@ -3,6 +3,7 @@ import { Button, Card, Checkbox, Input, List, Space, Tooltip, Typography } from 
 import Fuse, { FuseResult } from 'fuse.js';
 import React, { FC, useEffect, useState } from 'react';
 import { SliderAndInput } from './components/SliderAndInput';
+import { HighlightText } from './components/HighlightText';
 
 // 示例文件名数据集
 const sampleFiles = [
@@ -41,62 +42,6 @@ type FuseOptions = {
 // 添加 Fuse.js 的类型定义
 
 // 添加一个高亮文本的组件
-const HighlightText: FC<{ text: string; matches: FuseResult<string>['matches'] }> = ({
-  text,
-  matches
-}) => {
-  if (!matches || matches.length === 0) {
-    return <Typography.Text>{text}</Typography.Text>;
-  }
-
-  const segments: { text: string; isMatch: boolean }[] = [];
-  let lastIndex = 0;
-
-  // 现在 indices 的类型会被正确推断为 Array<[number, number]>
-  const indices = matches[0].indices;
-
-  // 添加类型注解来修复 [start, end] 的类型错误
-  indices.forEach(([start, end]: [number, number]) => {
-    // 添加未匹配的文本
-    if (start > lastIndex) {
-      segments.push({
-        text: text.substring(lastIndex, start),
-        isMatch: false
-      });
-    }
-    // 添加匹配的文本
-    segments.push({
-      text: text.substring(start, end + 1),
-      isMatch: true
-    });
-    lastIndex = end + 1;
-  });
-
-  // 添加剩余的未匹配文本
-  if (lastIndex < text.length) {
-    segments.push({
-      text: text.substring(lastIndex),
-      isMatch: false
-    });
-  }
-
-  return (
-    <Typography.Text>
-      {segments.map((segment, index) => (
-        <span
-          key={index}
-          style={segment.isMatch ? {
-            backgroundColor: '#ffd591',
-            padding: '0 2px',
-            borderRadius: '2px'
-          } : undefined}
-        >
-          {segment.text}
-        </span>
-      ))}
-    </Typography.Text>
-  );
-};
 
 export const Hello: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
