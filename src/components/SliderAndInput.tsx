@@ -7,7 +7,6 @@ interface SliderAndInputProps {
   min: number;
   max: number;
   step?: number;
-  inputWidth?: number;
 }
 
 export const SliderAndInput: FC<SliderAndInputProps> = ({
@@ -16,7 +15,6 @@ export const SliderAndInput: FC<SliderAndInputProps> = ({
   min,
   max,
   step = 1,
-  inputWidth = 60,
 }) => {
   return (
     <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
@@ -32,7 +30,7 @@ export const SliderAndInput: FC<SliderAndInputProps> = ({
       <Input
         type="number"
         step={step}
-        style={{ width: inputWidth }}
+        style={{ width: 70 }}
         value={value}
         onChange={(e) => {
           const newValue = parseFloat(e.target.value);
