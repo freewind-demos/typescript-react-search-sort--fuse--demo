@@ -345,7 +345,16 @@ export const Hello: FC = () => {
             </Tooltip>
 
             <div>
-              <Typography.Text>模糊匹配阈值</Typography.Text>
+              <Tooltip 
+                title={
+                  <div>
+                    <div><strong>{optionDescriptions.threshold.title}</strong></div>
+                    <div>{optionDescriptions.threshold.description}</div>
+                  </div>
+                }
+              >
+                <Typography.Text>模糊匹配阈值</Typography.Text>
+              </Tooltip>
               <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                 <Slider
                   style={{ flex: 1, minWidth: 0 }}
@@ -372,7 +381,16 @@ export const Hello: FC = () => {
             </div>
 
             <div>
-              <Typography.Text>最小匹配长度</Typography.Text>
+              <Tooltip 
+                title={
+                  <div>
+                    <div><strong>{optionDescriptions.minMatchCharLength.title}</strong></div>
+                    <div>{optionDescriptions.minMatchCharLength.description}</div>
+                  </div>
+                }
+              >
+                <Typography.Text>最小匹配长度</Typography.Text>
+              </Tooltip>
               <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                 <Slider
                   style={{ flex: 1, minWidth: 0 }}
@@ -398,7 +416,16 @@ export const Hello: FC = () => {
             </div>
 
             <div>
-              <Typography.Text>位置</Typography.Text>
+              <Tooltip 
+                title={
+                  <div>
+                    <div><strong>{optionDescriptions.location.title}</strong></div>
+                    <div>{optionDescriptions.location.description}</div>
+                  </div>
+                }
+              >
+                <Typography.Text>位置</Typography.Text>
+              </Tooltip>
               <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                 <Slider
                   style={{ flex: 1, minWidth: 0 }}
@@ -424,7 +451,16 @@ export const Hello: FC = () => {
             </div>
 
             <div>
-              <Typography.Text>距离</Typography.Text>
+              <Tooltip 
+                title={
+                  <div>
+                    <div><strong>{optionDescriptions.distance.title}</strong></div>
+                    <div>{optionDescriptions.distance.description}</div>
+                  </div>
+                }
+              >
+                <Typography.Text>距离</Typography.Text>
+              </Tooltip>
               <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                 <Slider
                   style={{ flex: 1, minWidth: 0 }}
