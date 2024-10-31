@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import Fuse from 'fuse.js';
+import Fuse, { FuseResult } from 'fuse.js';
 import './Hello.pcss';
 
 // 示例文件名数据集
@@ -33,12 +33,74 @@ type FuseOptions = {
   useExtendedSearch: boolean;
   ignoreLocation: boolean;
   keys: string[];
+  includeMatches: boolean;
+};
+
+// 添加 Fuse.js 的类型定义
+
+// 添加一个高亮文本的组件
+const HighlightText: FC<{ text: string; matches: FuseResult<string>['matches'] }> = ({
+  text,
+  matches
+}) => {
+  if (!matches || matches.length === 0) {
+    return <span>{text}</span>;
+  }
+
+  const segments: { text: string; isMatch: boolean }[] = [];
+  let lastIndex = 0;
+
+  // 现在 indices 的类型会被正确推断为 Array<[number, number]>
+  const indices = matches[0].indices;
+
+  // 添加类型注解来修复 [start, end] 的类型错误
+  indices.forEach(([start, end]: [number, number]) => {
+    // 添加未匹配的文本
+    if (start > lastIndex) {
+      segments.push({
+        text: text.substring(lastIndex, start),
+        isMatch: false
+      });
+    }
+    // 添加匹配的文本
+    segments.push({
+      text: text.substring(start, end + 1),
+      isMatch: true
+    });
+    lastIndex = end + 1;
+  });
+
+  // 添加剩余的未匹配文本
+  if (lastIndex < text.length) {
+    segments.push({
+      text: text.substring(lastIndex),
+      isMatch: false
+    });
+  }
+
+  return (
+    <span>
+      {segments.map((segment, index) => (
+        <span
+          key={index}
+          className={segment.isMatch ? 'highlight' : undefined}
+        >
+          {segment.text}
+        </span>
+      ))}
+    </span>
+  );
 };
 
 export const Hello: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [results, setResults] = useState<Array<{ item: string; score?: number }>>(
-    sampleFiles.map(file => ({ item: file }))
+  const [results, setResults] = useState<Array<FuseResult<string>>>(
+    sampleFiles.map(file => ({ 
+      item: file, 
+      matches: [],
+      refIndex: 0,
+      score: 1
+    }))
   );
   const [options, setOptions] = useState<FuseOptions>({
     isCaseSensitive: false,
@@ -53,6 +115,7 @@ export const Hello: FC = () => {
     useExtendedSearch: false,
     ignoreLocation: false,
     keys: ['*'],
+    includeMatches: true,
   });
 
   // 添加示例关键词
@@ -67,10 +130,15 @@ export const Hello: FC = () => {
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
-      setResults(sampleFiles.map(file => ({ item: file })));
+      setResults(sampleFiles.map(file => ({ 
+        item: file, 
+        matches: [],
+        refIndex: 0,
+        score: 1
+      })));
       return;
     }
-    
+
     const fuse = new Fuse(sampleFiles, options);
     const searchResults = fuse.search(searchTerm);
     setResults(searchResults);
@@ -79,7 +147,7 @@ export const Hello: FC = () => {
   return (
     <div className="Hello">
       <h1>Fuse.js 文件搜索示例</h1>
-      
+
       <div className="main-container">
         {/* 左侧参数面板 */}
         <div className="params-panel">
@@ -89,7 +157,7 @@ export const Hello: FC = () => {
               <input
                 type="checkbox"
                 checked={options.isCaseSensitive}
-                onChange={(e) => setOptions({...options, isCaseSensitive: e.target.checked})}
+                onChange={(e) => setOptions({ ...options, isCaseSensitive: e.target.checked })}
               />
               区分大小写
             </label>
@@ -98,7 +166,7 @@ export const Hello: FC = () => {
               <input
                 type="checkbox"
                 checked={options.includeScore}
-                onChange={(e) => setOptions({...options, includeScore: e.target.checked})}
+                onChange={(e) => setOptions({ ...options, includeScore: e.target.checked })}
               />
               包含匹配分数
             </label>
@@ -107,7 +175,7 @@ export const Hello: FC = () => {
               <input
                 type="checkbox"
                 checked={options.shouldSort}
-                onChange={(e) => setOptions({...options, shouldSort: e.target.checked})}
+                onChange={(e) => setOptions({ ...options, shouldSort: e.target.checked })}
               />
               结果排序
             </label>
@@ -116,7 +184,7 @@ export const Hello: FC = () => {
               <input
                 type="checkbox"
                 checked={options.tokenize}
-                onChange={(e) => setOptions({...options, tokenize: e.target.checked})}
+                onChange={(e) => setOptions({ ...options, tokenize: e.target.checked })}
               />
               分词匹配
             </label>
@@ -125,7 +193,7 @@ export const Hello: FC = () => {
               <input
                 type="checkbox"
                 checked={options.findAllMatches}
-                onChange={(e) => setOptions({...options, findAllMatches: e.target.checked})}
+                onChange={(e) => setOptions({ ...options, findAllMatches: e.target.checked })}
               />
               查找所有匹配
             </label>
@@ -134,7 +202,7 @@ export const Hello: FC = () => {
               <input
                 type="checkbox"
                 checked={options.useExtendedSearch}
-                onChange={(e) => setOptions({...options, useExtendedSearch: e.target.checked})}
+                onChange={(e) => setOptions({ ...options, useExtendedSearch: e.target.checked })}
               />
               使用扩展搜索
             </label>
@@ -143,7 +211,7 @@ export const Hello: FC = () => {
               <input
                 type="checkbox"
                 checked={options.ignoreLocation}
-                onChange={(e) => setOptions({...options, ignoreLocation: e.target.checked})}
+                onChange={(e) => setOptions({ ...options, ignoreLocation: e.target.checked })}
               />
               忽略位置
             </label>
@@ -157,7 +225,7 @@ export const Hello: FC = () => {
                   max="1"
                   step="0.1"
                   value={options.threshold}
-                  onChange={(e) => setOptions({...options, threshold: parseFloat(e.target.value)})}
+                  onChange={(e) => setOptions({ ...options, threshold: parseFloat(e.target.value) })}
                 />
               </label>
             </div>
@@ -170,7 +238,7 @@ export const Hello: FC = () => {
                   min="1"
                   max="10"
                   value={options.minMatchCharLength}
-                  onChange={(e) => setOptions({...options, minMatchCharLength: parseInt(e.target.value)})}
+                  onChange={(e) => setOptions({ ...options, minMatchCharLength: parseInt(e.target.value) })}
                 />
               </label>
             </div>
@@ -183,7 +251,7 @@ export const Hello: FC = () => {
                   min="0"
                   max="100"
                   value={options.location}
-                  onChange={(e) => setOptions({...options, location: parseInt(e.target.value)})}
+                  onChange={(e) => setOptions({ ...options, location: parseInt(e.target.value) })}
                 />
               </label>
             </div>
@@ -197,14 +265,14 @@ export const Hello: FC = () => {
                   max="1000"
                   step="10"
                   value={options.distance}
-                  onChange={(e) => setOptions({...options, distance: parseInt(e.target.value)})}
+                  onChange={(e) => setOptions({ ...options, distance: parseInt(e.target.value) })}
                 />
               </label>
             </div>
           </div>
         </div>
 
-        {/* 右侧内容区 */}
+        {/* 侧内容区 */}
         <div className="content-panel">
           {/* 搜索输入框 */}
           <div className="search-container">
@@ -233,20 +301,17 @@ export const Hello: FC = () => {
 
           {/* 搜索结果 */}
           <div className="search-results">
-            {results.length > 0 ? (
-              <ul>
-                {results.map((result, index) => (
-                  <li key={index}>
-                    {result.item}
-                    {result.score !== undefined && (
-                      <span className="score">（匹配度：{(1 - result.score).toFixed(2)}）</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>无匹配结果</p>
-            )}
+            {results.map((result, index) => (
+              <div key={index} className="result-item">
+                <HighlightText
+                  text={result.item}
+                  matches={result.matches}
+                />
+                <span className="score">
+                  Score: {result.score?.toFixed(3)}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
