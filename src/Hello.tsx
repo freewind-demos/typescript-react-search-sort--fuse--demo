@@ -344,83 +344,55 @@ export const Hello: FC = () => {
               </Checkbox>
             </Tooltip>
 
-            <Tooltip 
-              title={
-                <div>
-                  <div><strong>{optionDescriptions.threshold.title}</strong></div>
-                  <div>{optionDescriptions.threshold.description}</div>
-                </div>
-              }
-            >
-              <div>
-                <Typography.Text>模糊匹配阈值</Typography.Text>
-                <Slider
-                  min={0}
-                  max={1}
-                  step={0.1}
-                  value={options.threshold}
-                  onChange={(value) => setOptions({ ...options, threshold: value })}
-                />
-              </div>
-            </Tooltip>
+            <div>
+              <Typography.Text>模糊匹配阈值</Typography.Text>
+              <Slider
+                min={0}
+                max={1}
+                step={0.1}
+                value={options.threshold}
+                onChange={(value) => setOptions({ ...options, threshold: value })}
+                tooltip={{ formatter: value => value?.toString() }}
+                marks={{ 0: '0', 1: '1' }}
+              />
+            </div>
 
-            <Tooltip 
-              title={
-                <div>
-                  <div><strong>{optionDescriptions.minMatchCharLength.title}</strong></div>
-                  <div>{optionDescriptions.minMatchCharLength.description}</div>
-                </div>
-              }
-            >
-              <div>
-                <Typography.Text>最小匹配长度</Typography.Text>
-                <Slider
-                  min={1}
-                  max={10}
-                  value={options.minMatchCharLength}
-                  onChange={(value) => setOptions({ ...options, minMatchCharLength: value })}
-                />
-              </div>
-            </Tooltip>
+            <div>
+              <Typography.Text>最小匹配长度</Typography.Text>
+              <Slider
+                min={1}
+                max={10}
+                value={options.minMatchCharLength}
+                onChange={(value) => setOptions({ ...options, minMatchCharLength: value })}
+                tooltip={{ formatter: value => value?.toString() }}
+                marks={{ 1: '1', 10: '10' }}
+              />
+            </div>
 
-            <Tooltip 
-              title={
-                <div>
-                  <div><strong>{optionDescriptions.location.title}</strong></div>
-                  <div>{optionDescriptions.location.description}</div>
-                </div>
-              }
-            >
-              <div>
-                <Typography.Text>位置</Typography.Text>
-                <Slider
-                  min={0}
-                  max={100}
-                  value={options.location}
-                  onChange={(value) => setOptions({ ...options, location: value })}
-                />
-              </div>
-            </Tooltip>
+            <div>
+              <Typography.Text>位置</Typography.Text>
+              <Slider
+                min={0}
+                max={100}
+                value={options.location}
+                onChange={(value) => setOptions({ ...options, location: value })}
+                tooltip={{ formatter: value => value?.toString() }}
+                marks={{ 0: '0', 100: '100' }}
+              />
+            </div>
 
-            <Tooltip 
-              title={
-                <div>
-                  <div><strong>{optionDescriptions.distance.title}</strong></div>
-                  <div>{optionDescriptions.distance.description}</div>
-                </div>
-              }
-            >
-              <div>
-                <Typography.Text>距离</Typography.Text>
-                <Slider
-                  min={0}
-                  max={1000}
-                  step={10}
-                  value={options.distance}
-                  onChange={(value) => setOptions({ ...options, distance: value })}
-                />
-              </div>
-            </Tooltip>
+            <div>
+              <Typography.Text>距离</Typography.Text>
+              <Slider
+                min={0}
+                max={1000}
+                step={10}
+                value={options.distance}
+                onChange={(value) => setOptions({ ...options, distance: value })}
+                tooltip={{ formatter: value => value?.toString() }}
+                marks={{ 0: '0', 1000: '1000' }}
+              />
+            </div>
           </Space>
         </Card>
 
