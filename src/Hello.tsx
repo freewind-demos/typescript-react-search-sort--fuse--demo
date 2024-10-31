@@ -1,7 +1,7 @@
-import React, { FC, useState, useEffect } from 'react';
-import Fuse, { FuseResult } from 'fuse.js';
-import { Input, Checkbox, Slider, Button, Card, List, Typography, Space, Divider, Tooltip } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import { Button, Card, Checkbox, Input, List, Space, Tooltip, Typography } from 'antd';
+import Fuse, { FuseResult } from 'fuse.js';
+import React, { FC, useEffect, useState } from 'react';
 import { SliderAndInput } from './components/SliderAndInput';
 
 // 示例文件名数据集
@@ -101,8 +101,8 @@ const HighlightText: FC<{ text: string; matches: FuseResult<string>['matches'] }
 export const Hello: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<Array<FuseResult<string>>>(
-    sampleFiles.map(file => ({ 
-      item: file, 
+    sampleFiles.map(file => ({
+      item: file,
       matches: [],
       refIndex: 0,
       score: 1
@@ -136,8 +136,8 @@ export const Hello: FC = () => {
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
-      setResults(sampleFiles.map(file => ({ 
-        item: file, 
+      setResults(sampleFiles.map(file => ({
+        item: file,
         matches: [],
         refIndex: 0,
         score: 1
@@ -202,12 +202,12 @@ export const Hello: FC = () => {
       <Typography.Title level={2}>Fuse.js 文件搜索示例</Typography.Title>
 
       <div style={{ display: 'flex', gap: 24 }}>
-        <Card 
-          title="搜索参数设置" 
+        <Card
+          title="搜索参数设置"
           style={{ width: 300 }}
         >
           <Space direction="vertical" style={{ width: '100%' }}>
-            <Tooltip 
+            <Tooltip
               title={
                 <div>
                   <div><strong>{optionDescriptions.isCaseSensitive.title}</strong></div>
@@ -222,8 +222,8 @@ export const Hello: FC = () => {
                 区分大小写
               </Checkbox>
             </Tooltip>
-            
-            <Tooltip 
+
+            <Tooltip
               title={
                 <div>
                   <div><strong>{optionDescriptions.includeScore.title}</strong></div>
@@ -238,8 +238,8 @@ export const Hello: FC = () => {
                 包含匹配分数
               </Checkbox>
             </Tooltip>
-            
-            <Tooltip 
+
+            <Tooltip
               title={
                 <div>
                   <div><strong>{optionDescriptions.shouldSort.title}</strong></div>
@@ -254,8 +254,8 @@ export const Hello: FC = () => {
                 结果排序
               </Checkbox>
             </Tooltip>
-            
-            <Tooltip 
+
+            <Tooltip
               title={
                 <div>
                   <div><strong>{optionDescriptions.tokenize.title}</strong></div>
@@ -270,8 +270,8 @@ export const Hello: FC = () => {
                 分词匹配
               </Checkbox>
             </Tooltip>
-            
-            <Tooltip 
+
+            <Tooltip
               title={
                 <div>
                   <div><strong>{optionDescriptions.findAllMatches.title}</strong></div>
@@ -286,8 +286,8 @@ export const Hello: FC = () => {
                 查找所有匹配
               </Checkbox>
             </Tooltip>
-            
-            <Tooltip 
+
+            <Tooltip
               title={
                 <div>
                   <div><strong>{optionDescriptions.useExtendedSearch.title}</strong></div>
@@ -302,8 +302,8 @@ export const Hello: FC = () => {
                 使用扩展搜索
               </Checkbox>
             </Tooltip>
-            
-            <Tooltip 
+
+            <Tooltip
               title={
                 <div>
                   <div><strong>{optionDescriptions.ignoreLocation.title}</strong></div>
@@ -320,7 +320,7 @@ export const Hello: FC = () => {
             </Tooltip>
 
             <div>
-              <Tooltip 
+              <Tooltip
                 title={
                   <div>
                     <div><strong>{optionDescriptions.threshold.title}</strong></div>
@@ -340,7 +340,7 @@ export const Hello: FC = () => {
             </div>
 
             <div>
-              <Tooltip 
+              <Tooltip
                 title={
                   <div>
                     <div><strong>{optionDescriptions.minMatchCharLength.title}</strong></div>
@@ -359,7 +359,7 @@ export const Hello: FC = () => {
             </div>
 
             <div>
-              <Tooltip 
+              <Tooltip
                 title={
                   <div>
                     <div><strong>{optionDescriptions.location.title}</strong></div>
@@ -378,7 +378,7 @@ export const Hello: FC = () => {
             </div>
 
             <div>
-              <Tooltip 
+              <Tooltip
                 title={
                   <div>
                     <div><strong>{optionDescriptions.distance.title}</strong></div>
@@ -409,13 +409,13 @@ export const Hello: FC = () => {
 
           <Space wrap style={{ margin: '16px 0' }}>
             {sampleKeywords.map((keyword, index) => (
-              <Button
-                key={index}
-                onClick={() => setSearchTerm(keyword.text)}
-                title={keyword.desc}
-              >
-                {keyword.text}
-              </Button>
+              <Tooltip key={index} title={keyword.desc}>
+                <Button
+                  onClick={() => setSearchTerm(keyword.text)}
+                >
+                  {keyword.text}
+                </Button>
+              </Tooltip>
             ))}
           </Space>
 
