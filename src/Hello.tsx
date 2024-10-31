@@ -25,6 +25,8 @@ type FuseOptions = {
   includeScore: boolean;
   shouldSort: boolean;
   threshold: number;
+  tokenize: boolean;
+  minMatchCharLength: number;
 };
 
 export const Hello: FC = () => {
@@ -34,7 +36,9 @@ export const Hello: FC = () => {
     isCaseSensitive: false,
     includeScore: true,
     shouldSort: true,
-    threshold: 0.3,
+    threshold: 0.8,
+    tokenize: false,
+    minMatchCharLength: 1,
   });
 
   useEffect(() => {
