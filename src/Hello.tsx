@@ -1,6 +1,8 @@
 import React, { FC, useState, useEffect } from 'react';
 import Fuse, { FuseResult } from 'fuse.js';
-import './Hello.pcss';
+import { Input, Checkbox, Slider, Button, Card, List, Typography, Space, Divider } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { css } from '@emotion/css';
 
 // 示例文件名数据集
 const sampleFiles = [
@@ -36,6 +38,38 @@ type FuseOptions = {
   includeMatches: boolean;
 };
 
+const styles = {
+  container: css`
+    padding: 24px;
+  `,
+  mainContainer: css`
+    display: flex;
+    gap: 24px;
+  `,
+  paramsPanel: css`
+    width: 300px;
+  `,
+  contentPanel: css`
+    flex: 1;
+  `,
+  highlight: css`
+    background-color: #ffd591;
+    padding: 0 2px;
+    border-radius: 2px;
+  `,
+  searchResults: css`
+    margin-top: 16px;
+  `,
+  keywordButtons: css`
+    margin: 16px 0;
+  `,
+  score: css`
+    color: #8c8c8c;
+    font-size: 12px;
+    margin-left: 8px;
+  `
+};
+
 // 添加 Fuse.js 的类型定义
 
 // 添加一个高亮文本的组件
@@ -44,7 +78,7 @@ const HighlightText: FC<{ text: string; matches: FuseResult<string>['matches'] }
   matches
 }) => {
   if (!matches || matches.length === 0) {
-    return <span>{text}</span>;
+    return <Typography.Text>{text}</Typography.Text>;
   }
 
   const segments: { text: string; isMatch: boolean }[] = [];
@@ -79,16 +113,16 @@ const HighlightText: FC<{ text: string; matches: FuseResult<string>['matches'] }
   }
 
   return (
-    <span>
+    <Typography.Text>
       {segments.map((segment, index) => (
         <span
           key={index}
-          className={segment.isMatch ? 'highlight' : undefined}
+          className={segment.isMatch ? styles.highlight : undefined}
         >
           {segment.text}
         </span>
       ))}
-    </span>
+    </Typography.Text>
   );
 };
 
@@ -145,174 +179,135 @@ export const Hello: FC = () => {
   }, [searchTerm, options]);
 
   return (
-    <div className="Hello">
-      <h1>Fuse.js 文件搜索示例</h1>
+    <div className={styles.container}>
+      <Typography.Title level={2}>Fuse.js 文件搜索示例</Typography.Title>
 
-      <div className="main-container">
-        {/* 左侧参数面板 */}
-        <div className="params-panel">
-          <h3>搜索参数设置</h3>
-          <div className="options-grid">
-            <label>
-              <input
-                type="checkbox"
-                checked={options.isCaseSensitive}
-                onChange={(e) => setOptions({ ...options, isCaseSensitive: e.target.checked })}
-              />
+      <div className={styles.mainContainer}>
+        <Card title="搜索参数设置" className={styles.paramsPanel}>
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <Checkbox
+              checked={options.isCaseSensitive}
+              onChange={(e) => setOptions({ ...options, isCaseSensitive: e.target.checked })}
+            >
               区分大小写
-            </label>
-
-            <label>
-              <input
-                type="checkbox"
-                checked={options.includeScore}
-                onChange={(e) => setOptions({ ...options, includeScore: e.target.checked })}
-              />
+            </Checkbox>
+            
+            <Checkbox
+              checked={options.includeScore}
+              onChange={(e) => setOptions({ ...options, includeScore: e.target.checked })}
+            >
               包含匹配分数
-            </label>
-
-            <label>
-              <input
-                type="checkbox"
-                checked={options.shouldSort}
-                onChange={(e) => setOptions({ ...options, shouldSort: e.target.checked })}
-              />
+            </Checkbox>
+            
+            <Checkbox
+              checked={options.shouldSort}
+              onChange={(e) => setOptions({ ...options, shouldSort: e.target.checked })}
+            >
               结果排序
-            </label>
-
-            <label>
-              <input
-                type="checkbox"
-                checked={options.tokenize}
-                onChange={(e) => setOptions({ ...options, tokenize: e.target.checked })}
-              />
+            </Checkbox>
+            
+            <Checkbox
+              checked={options.tokenize}
+              onChange={(e) => setOptions({ ...options, tokenize: e.target.checked })}
+            >
               分词匹配
-            </label>
-
-            <label>
-              <input
-                type="checkbox"
-                checked={options.findAllMatches}
-                onChange={(e) => setOptions({ ...options, findAllMatches: e.target.checked })}
-              />
+            </Checkbox>
+            
+            <Checkbox
+              checked={options.findAllMatches}
+              onChange={(e) => setOptions({ ...options, findAllMatches: e.target.checked })}
+            >
               查找所有匹配
-            </label>
-
-            <label>
-              <input
-                type="checkbox"
-                checked={options.useExtendedSearch}
-                onChange={(e) => setOptions({ ...options, useExtendedSearch: e.target.checked })}
-              />
+            </Checkbox>
+            
+            <Checkbox
+              checked={options.useExtendedSearch}
+              onChange={(e) => setOptions({ ...options, useExtendedSearch: e.target.checked })}
+            >
               使用扩展搜索
-            </label>
-
-            <label>
-              <input
-                type="checkbox"
-                checked={options.ignoreLocation}
-                onChange={(e) => setOptions({ ...options, ignoreLocation: e.target.checked })}
-              />
+            </Checkbox>
+            
+            <Checkbox
+              checked={options.ignoreLocation}
+              onChange={(e) => setOptions({ ...options, ignoreLocation: e.target.checked })}
+            >
               忽略位置
-            </label>
+            </Checkbox>
 
-            <div className="slider-option">
-              <label>
-                模糊匹配阈值: {options.threshold}
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.1"
-                  value={options.threshold}
-                  onChange={(e) => setOptions({ ...options, threshold: parseFloat(e.target.value) })}
-                />
-              </label>
-            </div>
-
-            <div className="slider-option">
-              <label>
-                最小匹配长度: {options.minMatchCharLength}
-                <input
-                  type="range"
-                  min="1"
-                  max="10"
-                  value={options.minMatchCharLength}
-                  onChange={(e) => setOptions({ ...options, minMatchCharLength: parseInt(e.target.value) })}
-                />
-              </label>
-            </div>
-
-            <div className="slider-option">
-              <label>
-                位置: {options.location}
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={options.location}
-                  onChange={(e) => setOptions({ ...options, location: parseInt(e.target.value) })}
-                />
-              </label>
-            </div>
-
-            <div className="slider-option">
-              <label>
-                距离: {options.distance}
-                <input
-                  type="range"
-                  min="0"
-                  max="1000"
-                  step="10"
-                  value={options.distance}
-                  onChange={(e) => setOptions({ ...options, distance: parseInt(e.target.value) })}
-                />
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* 侧内容区 */}
-        <div className="content-panel">
-          {/* 搜索输入框 */}
-          <div className="search-container">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="输入搜索关键词..."
-              className="search-input"
+            <Typography.Text>模糊匹配阈值</Typography.Text>
+            <Slider
+              min={0}
+              max={1}
+              step={0.1}
+              value={options.threshold}
+              onChange={(value) => setOptions({ ...options, threshold: value })}
             />
+
+            <Typography.Text>最小匹配长度</Typography.Text>
+            <Slider
+              min={1}
+              max={10}
+              value={options.minMatchCharLength}
+              onChange={(value) => setOptions({ ...options, minMatchCharLength: value })}
+            />
+
+            <Typography.Text>位置</Typography.Text>
+            <Slider
+              min={0}
+              max={100}
+              value={options.location}
+              onChange={(value) => setOptions({ ...options, location: value })}
+            />
+
+            <Typography.Text>距离</Typography.Text>
+            <Slider
+              min={0}
+              max={1000}
+              step={10}
+              value={options.distance}
+              onChange={(value) => setOptions({ ...options, distance: value })}
+            />
+          </Space>
+        </Card>
+
+        <div className={styles.contentPanel}>
+          <Input
+            size="large"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="输入搜索关键词..."
+            prefix={<SearchOutlined />}
+          />
+
+          <div className={styles.keywordButtons}>
+            <Space wrap>
+              {sampleKeywords.map((keyword, index) => (
+                <Button
+                  key={index}
+                  onClick={() => setSearchTerm(keyword.text)}
+                  title={keyword.desc}
+                >
+                  {keyword.text}
+                </Button>
+              ))}
+            </Space>
           </div>
 
-          {/* 示例关键词按钮 */}
-          <div className="keyword-buttons">
-            {sampleKeywords.map((keyword, index) => (
-              <button
-                key={index}
-                onClick={() => setSearchTerm(keyword.text)}
-                title={keyword.desc}
-                className="keyword-button"
-              >
-                {keyword.text}
-              </button>
-            ))}
-          </div>
-
-          {/* 搜索结果 */}
-          <div className="search-results">
-            {results.map((result, index) => (
-              <div key={index} className="result-item">
+          <List
+            className={styles.searchResults}
+            dataSource={results}
+            renderItem={(result, index) => (
+              <List.Item>
                 <HighlightText
                   text={result.item}
                   matches={result.matches}
                 />
-                <span className="score">
+                <span className={styles.score}>
                   Score: {result.score?.toFixed(3)}
                 </span>
-              </div>
-            ))}
-          </div>
+              </List.Item>
+            )}
+          />
         </div>
       </div>
     </div>
