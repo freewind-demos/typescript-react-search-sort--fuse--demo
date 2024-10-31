@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import Fuse, { FuseResult } from 'fuse.js';
 import { Input, Checkbox, Slider, Button, Card, List, Typography, Space, Divider, Tooltip } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import { SliderAndInput } from './components/SliderAndInput';
 
 // 示例文件名数据集
 const sampleFiles = [
@@ -329,29 +330,13 @@ export const Hello: FC = () => {
               >
                 <Typography.Text>模糊匹配阈值</Typography.Text>
               </Tooltip>
-              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                <Slider
-                  style={{ flex: 1, minWidth: 0 }}
-                  min={0}
-                  max={1}
-                  step={0.1}
-                  value={options.threshold}
-                  marks={{ 0: '0', 1: '1' }}
-                  onChange={(value) => setOptions({ ...options, threshold: value })}
-                />
-                <Input
-                  type="number"
-                  step={0.1}
-                  style={{ width: 60 }}
-                  value={options.threshold}
-                  onChange={(e) => {
-                    const value = parseFloat(e.target.value);
-                    if (!isNaN(value) && value >= 0 && value <= 1) {
-                      setOptions({ ...options, threshold: value });
-                    }
-                  }}
-                />
-              </div>
+              <SliderAndInput
+                value={options.threshold}
+                onChange={(value) => setOptions({ ...options, threshold: value })}
+                min={0}
+                max={1}
+                step={0.1}
+              />
             </div>
 
             <div>
@@ -365,28 +350,12 @@ export const Hello: FC = () => {
               >
                 <Typography.Text>最小匹配长度</Typography.Text>
               </Tooltip>
-              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                <Slider
-                  style={{ flex: 1, minWidth: 0 }}
-                  min={1}
-                  max={10}
-                  value={options.minMatchCharLength}
-                  marks={{ 1: '1', 10: '10' }}
-                  onChange={(value) => setOptions({ ...options, minMatchCharLength: value })}
-                />
-                <Input
-                  type="number"
-                  step={1}
-                  style={{ width: 60 }}
-                  value={options.minMatchCharLength}
-                  onChange={(e) => {
-                    const value = parseInt(e.target.value);
-                    if (!isNaN(value) && value >= 1 && value <= 10) {
-                      setOptions({ ...options, minMatchCharLength: value });
-                    }
-                  }}
-                />
-              </div>
+              <SliderAndInput
+                value={options.minMatchCharLength}
+                onChange={(value) => setOptions({ ...options, minMatchCharLength: value })}
+                min={1}
+                max={10}
+              />
             </div>
 
             <div>
@@ -400,28 +369,12 @@ export const Hello: FC = () => {
               >
                 <Typography.Text>位置</Typography.Text>
               </Tooltip>
-              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                <Slider
-                  style={{ flex: 1, minWidth: 0 }}
-                  min={0}
-                  max={100}
-                  value={options.location}
-                  marks={{ 0: '0', 100: '100' }}
-                  onChange={(value) => setOptions({ ...options, location: value })}
-                />
-                <Input
-                  type="number"
-                  step={1}
-                  style={{ width: 60 }}
-                  value={options.location}
-                  onChange={(e) => {
-                    const value = parseInt(e.target.value);
-                    if (!isNaN(value) && value >= 0 && value <= 100) {
-                      setOptions({ ...options, location: value });
-                    }
-                  }}
-                />
-              </div>
+              <SliderAndInput
+                value={options.location}
+                onChange={(value) => setOptions({ ...options, location: value })}
+                min={0}
+                max={100}
+              />
             </div>
 
             <div>
@@ -435,29 +388,12 @@ export const Hello: FC = () => {
               >
                 <Typography.Text>距离</Typography.Text>
               </Tooltip>
-              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                <Slider
-                  style={{ flex: 1, minWidth: 0 }}
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={options.distance}
-                  marks={{ 0: '0', 100: '100' }}
-                  onChange={(value) => setOptions({ ...options, distance: value })}
-                />
-                <Input
-                  type="number"
-                  step={1}
-                  style={{ width: 60 }}
-                  value={options.distance}
-                  onChange={(e) => {
-                    const value = parseInt(e.target.value);
-                    if (!isNaN(value) && value >= 0 && value <= 100) {
-                      setOptions({ ...options, distance: value });
-                    }
-                  }}
-                />
-              </div>
+              <SliderAndInput
+                value={options.distance}
+                onChange={(value) => setOptions({ ...options, distance: value })}
+                min={0}
+                max={100}
+              />
             </div>
           </Space>
         </Card>
