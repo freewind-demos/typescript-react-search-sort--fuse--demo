@@ -346,52 +346,107 @@ export const Hello: FC = () => {
 
             <div>
               <Typography.Text>模糊匹配阈值</Typography.Text>
-              <Slider
-                min={0}
-                max={1}
-                step={0.1}
-                value={options.threshold}
-                onChange={(value) => setOptions({ ...options, threshold: value })}
-                tooltip={{ formatter: value => value?.toString() }}
-                marks={{ 0: '0', 1: '1' }}
-              />
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                <Slider
+                  style={{ flex: 1, minWidth: 0 }}
+                  min={0}
+                  max={1}
+                  step={0.1}
+                  value={options.threshold}
+                  marks={{ 0: '0', 1: '1' }}
+                  onChange={(value) => setOptions({ ...options, threshold: value })}
+                />
+                <Input
+                  type="number"
+                  step={0.1}
+                  style={{ width: 60 }}
+                  value={options.threshold}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value) && value >= 0 && value <= 1) {
+                      setOptions({ ...options, threshold: value });
+                    }
+                  }}
+                />
+              </div>
             </div>
 
             <div>
               <Typography.Text>最小匹配长度</Typography.Text>
-              <Slider
-                min={1}
-                max={10}
-                value={options.minMatchCharLength}
-                onChange={(value) => setOptions({ ...options, minMatchCharLength: value })}
-                tooltip={{ formatter: value => value?.toString() }}
-                marks={{ 1: '1', 10: '10' }}
-              />
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                <Slider
+                  style={{ flex: 1, minWidth: 0 }}
+                  min={1}
+                  max={10}
+                  value={options.minMatchCharLength}
+                  marks={{ 1: '1', 10: '10' }}
+                  onChange={(value) => setOptions({ ...options, minMatchCharLength: value })}
+                />
+                <Input
+                  type="number"
+                  step={1}
+                  style={{ width: 60 }}
+                  value={options.minMatchCharLength}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value);
+                    if (!isNaN(value) && value >= 1 && value <= 10) {
+                      setOptions({ ...options, minMatchCharLength: value });
+                    }
+                  }}
+                />
+              </div>
             </div>
 
             <div>
               <Typography.Text>位置</Typography.Text>
-              <Slider
-                min={0}
-                max={100}
-                value={options.location}
-                onChange={(value) => setOptions({ ...options, location: value })}
-                tooltip={{ formatter: value => value?.toString() }}
-                marks={{ 0: '0', 100: '100' }}
-              />
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                <Slider
+                  style={{ flex: 1, minWidth: 0 }}
+                  min={0}
+                  max={100}
+                  value={options.location}
+                  marks={{ 0: '0', 100: '100' }}
+                  onChange={(value) => setOptions({ ...options, location: value })}
+                />
+                <Input
+                  type="number"
+                  step={1}
+                  style={{ width: 60 }}
+                  value={options.location}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value);
+                    if (!isNaN(value) && value >= 0 && value <= 100) {
+                      setOptions({ ...options, location: value });
+                    }
+                  }}
+                />
+              </div>
             </div>
 
             <div>
               <Typography.Text>距离</Typography.Text>
-              <Slider
-                min={0}
-                max={1000}
-                step={10}
-                value={options.distance}
-                onChange={(value) => setOptions({ ...options, distance: value })}
-                tooltip={{ formatter: value => value?.toString() }}
-                marks={{ 0: '0', 1000: '1000' }}
-              />
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                <Slider
+                  style={{ flex: 1, minWidth: 0 }}
+                  min={0}
+                  max={1000}
+                  step={10}
+                  value={options.distance}
+                  onChange={(value) => setOptions({ ...options, distance: value })}
+                />
+                <Input
+                  type="number"
+                  step={10}
+                  style={{ width: 60 }}
+                  value={options.distance}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value);
+                    if (!isNaN(value) && value >= 0 && value <= 1000) {
+                      setOptions({ ...options, distance: value });
+                    }
+                  }}
+                />
+              </div>
             </div>
           </Space>
         </Card>
