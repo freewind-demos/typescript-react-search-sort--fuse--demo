@@ -1,9 +1,9 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Card, Checkbox, Input, List, Space, Tooltip, Typography } from 'antd';
-import Fuse, { FuseResult } from 'fuse.js';
+import Fuse, { FuseResult, IFuseOptions } from 'fuse.js';
 import React, { FC, useEffect, useState } from 'react';
-import { SliderAndInput } from './components/SliderAndInput';
 import { HighlightText } from './components/HighlightText';
+import { SliderAndInput } from './components/SliderAndInput';
 
 // 示例文件名数据集
 const sampleFiles = [
@@ -23,25 +23,20 @@ const sampleFiles = [
   'UPPERCASE_FILE.tsx',
 ];
 
-type FuseOptions = {
-  isCaseSensitive: boolean;
-  includeScore: boolean;
-  shouldSort: boolean;
-  threshold: number;
-  tokenize: boolean;
-  minMatchCharLength: number;
-  findAllMatches: boolean;
-  location: number;
-  distance: number;
-  useExtendedSearch: boolean;
-  ignoreLocation: boolean;
-  keys: string[];
-  includeMatches: boolean;
-};
-
-// 添加 Fuse.js 的类型定义
-
-// 添加一个高亮文本的组件
+const defaults = {
+  isCaseSensitive: false,
+  includeScore: true,
+  shouldSort: true,
+  threshold: 0.6,
+  minMatchCharLength: 1,
+  findAllMatches: false,
+  location: 0,
+  distance: 100,
+  useExtendedSearch: false,
+  ignoreLocation: false,
+  keys: ['*'],
+  includeMatches: true,
+} satisfies IFuseOptions<string>;
 
 export const Hello: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -53,21 +48,7 @@ export const Hello: FC = () => {
       score: 1
     }))
   );
-  const [options, setOptions] = useState<FuseOptions>({
-    isCaseSensitive: false,
-    includeScore: true,
-    shouldSort: true,
-    threshold: 0.6,
-    tokenize: false,
-    minMatchCharLength: 1,
-    findAllMatches: false,
-    location: 0,
-    distance: 100,
-    useExtendedSearch: false,
-    ignoreLocation: false,
-    keys: ['*'],
-    includeMatches: true,
-  });
+  const [options, setOptions] = useState<IFuseOptions<string>>(defaults);
 
   // 添加示例关键词
   const sampleKeywords = [
@@ -108,10 +89,6 @@ export const Hello: FC = () => {
       title: '结果排序',
       description: '根据匹配分数对结果进行排序，匹配度最高的排在最前面。'
     },
-    tokenize: {
-      title: '分词匹配',
-      description: '将搜索词和目标文本分解成单词进行匹配。例如"test helper"会被分解为"test"和"helper"分别匹配。'
-    },
     findAllMatches: {
       title: '查找所有匹配',
       description: '在单个字符串中查找所有匹配项，而不是找到第一个匹配后就停止。这对于高亮显示所有匹配项很有用。'
@@ -138,7 +115,7 @@ export const Hello: FC = () => {
     },
     distance: {
       title: '距离',
-      description: '允许匹配的最大距离。较大的值允许单词间有更多的字符差异。例如，距离为100时，"test helper"可以匹配到"test_helper"。'
+      description: '允许匹配的最大距��。较大的值允许单词间有更多的字符差异。例如，距离为100时，"test helper"可以匹配到"test_helper"。'
     }
   };
 
@@ -203,22 +180,6 @@ export const Hello: FC = () => {
             <Tooltip
               title={
                 <div>
-                  <div><strong>{optionDescriptions.tokenize.title}</strong></div>
-                  <div>{optionDescriptions.tokenize.description}</div>
-                </div>
-              }
-            >
-              <Checkbox
-                checked={options.tokenize}
-                onChange={(e) => setOptions({ ...options, tokenize: e.target.checked })}
-              >
-                分词匹配
-              </Checkbox>
-            </Tooltip>
-
-            <Tooltip
-              title={
-                <div>
                   <div><strong>{optionDescriptions.findAllMatches.title}</strong></div>
                   <div>{optionDescriptions.findAllMatches.description}</div>
                 </div>
@@ -276,7 +237,7 @@ export const Hello: FC = () => {
                 <Typography.Text>模糊匹配阈值</Typography.Text>
               </Tooltip>
               <SliderAndInput
-                value={options.threshold}
+                value={options.threshold ?? defaults.threshold}
                 onChange={(value) => setOptions({ ...options, threshold: value })}
                 min={0}
                 max={1}
@@ -296,7 +257,7 @@ export const Hello: FC = () => {
                 <Typography.Text>最小匹配长度</Typography.Text>
               </Tooltip>
               <SliderAndInput
-                value={options.minMatchCharLength}
+                value={options.minMatchCharLength ?? defaults.minMatchCharLength}
                 onChange={(value) => setOptions({ ...options, minMatchCharLength: value })}
                 min={1}
                 max={10}
@@ -315,7 +276,7 @@ export const Hello: FC = () => {
                 <Typography.Text>位置</Typography.Text>
               </Tooltip>
               <SliderAndInput
-                value={options.location}
+                value={options.location ?? defaults.location}
                 onChange={(value) => setOptions({ ...options, location: value })}
                 min={0}
                 max={100}
@@ -334,7 +295,7 @@ export const Hello: FC = () => {
                 <Typography.Text>距离</Typography.Text>
               </Tooltip>
               <SliderAndInput
-                value={options.distance}
+                value={options.distance ?? defaults.distance}
                 onChange={(value) => setOptions({ ...options, distance: value })}
                 min={0}
                 max={100}
