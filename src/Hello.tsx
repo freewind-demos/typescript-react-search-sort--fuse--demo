@@ -55,6 +55,16 @@ export const Hello: FC = () => {
     keys: ['*'],
   });
 
+  // 添加示例关键词
+  const sampleKeywords = [
+    { text: 'user', desc: '测试基础搜索' },
+    { text: 'FILE', desc: '测试大小写敏感' },
+    { text: 'case', desc: '测试不同命名风格' },
+    { text: 'test h', desc: '测试空格和距离参数' },
+    { text: '.tsx', desc: '测试文件扩展名搜索' },
+    { text: 'dash', desc: '测试部分匹配' },
+  ];
+
   useEffect(() => {
     if (searchTerm.trim() === '') {
       setResults(sampleFiles.map(file => ({ item: file })));
@@ -70,6 +80,19 @@ export const Hello: FC = () => {
     <div className="Hello">
       <h1>Fuse.js 文件搜索示例</h1>
       
+      <div className="keyword-buttons">
+        {sampleKeywords.map((keyword, index) => (
+          <button
+            key={index}
+            onClick={() => setSearchTerm(keyword.text)}
+            title={keyword.desc}
+            className="keyword-button"
+          >
+            {keyword.text}
+          </button>
+        ))}
+      </div>
+
       <div className="search-container">
         <input
           type="text"
